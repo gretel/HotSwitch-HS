@@ -18,7 +18,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
 
     obj.show = function(self)
         -- local t = TimeChecker.new()
-        local orderedWindows = self.windowModel:getCachedOrderedWindowsOrFetch()
+        local orderedWindows = self.keyStatusModel.sortedWindows or self.windowModel:getCachedOrderedWindowsOrFetch()
         -- t:diff("getCachedOrderedWindowsOrFetch")
 
         self:showRectangle(orderedWindows)
@@ -180,7 +180,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         self.baseCanvas:appendElements({
             frame = {
                 x = CanvasConstants.PADDING * 2 + CanvasConstants.KEY_LEFT_PADDING,
-                y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2 + 2,
                 h = CanvasConstants.ROW_HEIGHT,
                 w = CanvasConstants.KEY_W
             },
@@ -203,7 +203,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
         self.baseCanvas:appendElements({
             frame = {
                 x = CanvasConstants.PADDING * 2 + CanvasConstants.KEY_LEFT_PADDING + CanvasConstants.KEY_W,
-                y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2 + 2,
                 h = CanvasConstants.ROW_HEIGHT,
                 w = CanvasConstants.APP_NAME_W
             },
@@ -226,9 +226,9 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
     obj.showEachAppIcon = function(self, i, window)
         local frame = {
             x = CanvasConstants.PADDING * 2 + CanvasConstants.KEY_LEFT_PADDING + CanvasConstants.KEY_W,
-            y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
-            h = CanvasConstants.ROW_HEIGHT - 3,
-            w = CanvasConstants.APP_ICON_W - 3
+            y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2 + 1,
+            h = CanvasConstants.ROW_HEIGHT - 2,
+            w = CanvasConstants.APP_ICON_W - 2
         }
 
         local bundleID = window:application():bundleID()
@@ -273,7 +273,7 @@ BaseCanvasView.new = function(windowModel, settingModel, keyStatusModel)
             frame = {
                 x = CanvasConstants.PADDING * 3 + CanvasConstants.KEY_W + CanvasConstants.KEY_LEFT_PADDING +
                     CanvasConstants.APP_ICON_W,
-                y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2,
+                y = (i - 1) * CanvasConstants.ROW_HEIGHT + CanvasConstants.PADDING * 2 + 2,
                 h = CanvasConstants.ROW_HEIGHT,
                 w = CanvasConstants.getEffectivePanelW() - CanvasConstants.KEY_W - CanvasConstants.APP_ICON_W -
                     CanvasConstants.PADDING * 6

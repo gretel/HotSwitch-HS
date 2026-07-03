@@ -14,13 +14,16 @@ PanelLayoutView.new = function(windowModel, settingModel, keyStatusModel)
 
     obj.isOpen = false
     obj.baseCanvasView = BaseCanvasView.new(windowModel, settingModel, keyStatusModel)
-    obj.selectedRowCanvasView = SelectedRowCanvasView.new(windowModel, defaultRowPosition)
+    obj.selectedRowCanvasView = SelectedRowCanvasView.new(windowModel, keyStatusModel, defaultRowPosition)
     obj.settingModel = settingModel
 
     obj.show = function(self)
+        local windowCount = #(self.baseCanvasView.keyStatusModel.sortedWindows or self.windowModel:getCachedOrderedWindowsOrFetch())
+        local pos = defaultRowPosition > windowCount and 1 or defaultRowPosition
+
         if self.isOpen == false then
             self.isOpen = true
-            self.selectedRowCanvasView.position = defaultRowPosition
+            self.selectedRowCanvasView.position = pos
         end
 
         -- local t = TimeChecker.new()

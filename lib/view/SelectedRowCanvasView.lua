@@ -6,11 +6,12 @@ local CanvasConstants = require("hotswitch-hs/lib/common/CanvasConstants")
 local FrameCulculator = require("hotswitch-hs/lib/common/FrameCulculator")
 
 local SelectedRowCanvasView = {}
-SelectedRowCanvasView.new = function(windowModel, position)
+SelectedRowCanvasView.new = function(windowModel, keyStatusModel, position)
     local obj = View.new()
 
     obj.canvas = canvas
     obj.windowModel = windowModel
+    obj.keyStatusModel = keyStatusModel
     obj.position = position
 
     obj.show = function(self)
@@ -25,7 +26,7 @@ SelectedRowCanvasView.new = function(windowModel, position)
     end
 
     obj.createSelectedRow = function(self)
-        local orderedWindows = self.windowModel:getCachedOrderedWindowsOrFetch()
+        local orderedWindows = self.keyStatusModel.sortedWindows or self.windowModel:getCachedOrderedWindowsOrFetch()
         local baseCanvasFrame = FrameCulculator.calcBaseCanvasFrame(orderedWindows)
 
         if self.selectedRowCanvas == nil then
@@ -102,7 +103,8 @@ SelectedRowCanvasView.new = function(windowModel, position)
 
     obj.calcNextRowPosition = function(self, position, windowModel)
         local newPosition = position + 1
-        if newPosition > #windowModel:getCachedOrderedWindowsOrFetch() then
+        local max = self.keyStatusModel.sortedWindows and #self.keyStatusModel.sortedWindows or #windowModel:getCachedOrderedWindowsOrFetch()
+        if newPosition > max then
             newPosition = 1
         end
         return newPosition
@@ -110,8 +112,9 @@ SelectedRowCanvasView.new = function(windowModel, position)
 
     obj.calcPreviousRowPosition = function(self, position, windowModel)
         local newPosition = position - 1
+        local max = self.keyStatusModel.sortedWindows and #self.keyStatusModel.sortedWindows or #windowModel:getCachedOrderedWindowsOrFetch()
         if newPosition <= 0 then
-            newPosition = #windowModel:getCachedOrderedWindowsOrFetch()
+            newPosition = max
         end
         return newPosition
     end

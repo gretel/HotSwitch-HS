@@ -33,7 +33,7 @@ MainController.new = function()
     obj.hotkeyController = HotkeyController.new(obj)
 
     obj.panelLayoutView:setClickCallback(function(position)
-        obj.windowModel:focusWindow(obj.windowModel:getCachedOrderedWindowsOrFetch()[position])
+        obj.windowModel:focusWindow((obj.keyStatusModel.sortedWindows or obj.windowModel:getCachedOrderedWindowsOrFetch())[position])
         obj:finish()
     end)
 
@@ -157,7 +157,8 @@ MainController.new = function()
             self.showPanelTimer = nil
         end
 
-        self.windowModel:focusWindow(self.windowModel:getCachedOrderedWindowsOrFetch()[
+        local commitWindows = self.keyStatusModel.sortedWindows or self.windowModel:getCachedOrderedWindowsOrFetch()
+        self.windowModel:focusWindow(commitWindows[
             self.panelLayoutView:getSelectedRowPosition()])
         self:finish()
     end
